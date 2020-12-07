@@ -46,6 +46,16 @@ class Features
     }
 
     /**
+     * Determine if the application is using any network features.
+     *
+     * @return bool
+     */
+    public static function hasNetworkFeatures()
+    {
+        return static::enabled(static::networks());
+    }
+
+    /**
      * Enable the profile photo upload feature.
      *
      * @return string
@@ -73,5 +83,15 @@ class Features
     public static function teams()
     {
         return 'teams';
+    }
+
+    /**
+     * Enable the networks feature.
+     *
+     * @return string
+     */
+    public static function networks()
+    {
+        return 'networks';
     }
 }

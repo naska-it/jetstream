@@ -7,6 +7,9 @@ use Laravel\Jetstream\Contracts\CreatesTeams;
 use Laravel\Jetstream\Contracts\DeletesTeams;
 use Laravel\Jetstream\Contracts\DeletesUsers;
 use Laravel\Jetstream\Contracts\UpdatesTeamNames;
+use Laravel\Jetstream\Contracts\UpdatesNetworkNames;
+use Laravel\Jetstream\Contracts\DeletesNetworks;
+use Laravel\Jetstream\Contracts\AddsNetworkMembers;
 
 class Jetstream
 {
@@ -186,6 +189,16 @@ class Jetstream
     }
 
     /**
+     * Determine if Jetstream is supporting network features.
+     *
+     * @return bool
+     */
+    public static function hasNetworkFeatures()
+    {
+        return Features::hasNetworkFeatures();
+    }
+
+    /**
      * Find a user instance by the given ID.
      *
      * @param  int  $id
@@ -341,6 +354,39 @@ class Jetstream
     public static function deleteTeamsUsing(string $class)
     {
         return app()->singleton(DeletesTeams::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to update team names.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function updateNetworkNamesUsing(string $class)
+    {
+        return app()->singleton(UpdatesNetworkNames::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to delete networks.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function deleteNetworksUsing(string $class)
+    {
+        return app()->singleton(DeletesNetworks::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to add team members.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function addNetworkMembersUsing(string $class)
+    {
+        return app()->singleton(AddsNetworkMembers::class, $class);
     }
 
     /**

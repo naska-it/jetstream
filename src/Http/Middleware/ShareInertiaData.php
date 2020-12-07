@@ -32,6 +32,7 @@ class ShareInertiaData
                     'flash' => $request->session()->get('flash', []),
                     'hasApiFeatures' => Jetstream::hasApiFeatures(),
                     'hasTeamFeatures' => Jetstream::hasTeamFeatures(),
+                    'hasNetworkFeatures' => Jetstream::hasNetworkFeatures(),
                     'managesProfilePhotos' => Jetstream::managesProfilePhotos(),
                 ];
             },
@@ -44,8 +45,13 @@ class ShareInertiaData
                     $request->user()->currentTeam;
                 }
 
+                if (Jetstream::hasNetworkFeatures() && $request->user()) {
+                    $request->user()->currentNetwork;
+                }
+
                 return array_merge($request->user()->toArray(), array_filter([
                     'all_teams' => Jetstream::hasTeamFeatures() ? $request->user()->allTeams() : null,
+                    'all_networks' => Jetstream::hasNetworkFeatures() ? $request->user()->allNetworks() : null
                 ]), [
                     'two_factor_enabled' => ! is_null($request->user()->two_factor_secret),
                 ]);
@@ -55,7 +61,7 @@ class ShareInertiaData
                     return [$key => $bag->messages()];
                 })->all();
             },
-            'currentRouteName' => Route::currentRouteName(),
+            'currentRouteName' => Route::currentRouteName()
         ]));
 
         return $next($request);
